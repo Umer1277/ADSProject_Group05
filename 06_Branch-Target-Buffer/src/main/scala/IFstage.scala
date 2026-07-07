@@ -16,6 +16,7 @@ class IF (BinaryFile: String) extends Module {
     val btbValid        = Input(Bool())
     val btbTarget       = Input(UInt(32.W))
     val btbPredictTaken = Input(Bool())
+    val useBTB          = Input(Bool())
 
     val instr = Output(UInt(32.W))
     val pcOut = Output(UInt(32.W))
@@ -42,8 +43,8 @@ class IF (BinaryFile: String) extends Module {
   val isConditionalBranch = opcode === "b1100011".U
 
   // << NEW in A06 >>
-  //Why: We use the BTB target only when the BTB predicts taken
-  val useBTB = isConditionalBranch && io.btbValid && io.btbPredictTaken
+  //Why: We use the BTB target only when the BTB predicts taken and is enabled
+  val useBTB = io.useBTB && isConditionalBranch && io.btbValid && io.btbPredictTaken
 
   //We output the fetched instruction and its PC
   io.instr := fetchedInstr

@@ -182,8 +182,8 @@ dut.io.exception.expect(false.B)
 dut.clock.step(1)
 
 // flushed
-dut.clock.step(1)
-dut.clock.step(1)
+dut.clock.step(2)
+
 
 // target
 dut.io.result.expect(50.U)
@@ -199,8 +199,8 @@ dut.io.exception.expect(false.B)
 dut.clock.step(1)
 
 // flushed
-dut.clock.step(1)
-dut.clock.step(1)
+dut.clock.step(2)
+
 
 // target
 dut.io.result.expect(60.U)
@@ -228,8 +228,8 @@ dut.io.exception.expect(false.B)
 dut.clock.step(1)
 
 // flushed
-dut.clock.step(1)
-dut.clock.step(1)
+dut.clock.step(2)
+
 
 // target
 dut.io.result.expect(80.U)
@@ -271,8 +271,8 @@ dut.io.exception.expect(false.B)
 dut.clock.step(1)
 
 // two flushed instructions
-dut.clock.step(1)
-dut.clock.step(1)
+dut.clock.step(2)
+
 
 // target
 dut.io.result.expect(100.U)

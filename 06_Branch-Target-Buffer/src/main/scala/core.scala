@@ -13,7 +13,19 @@ class PipelinedRV32Icore (BinaryFile: String) extends Module {
 
     //We keep this output name for older wrappers or tests
     val isInvalid = Output(Bool())
+
+    val totalCycles          = Output(UInt(32.W))
+    val totalBranches        = Output(UInt(32.W))
+    val mispredictedBranches = Output(UInt(32.W))
+    val useBTB               = Input(Bool())
   })
+
+  // Performance counters
+  val totalCyclesCount          = RegInit(0.U(32.W))
+  val totalBranchesCount        = RegInit(0.U(32.W))
+  val mispredictedBranchesCount = RegInit(0.U(32.W))
+
+  totalCyclesCount := totalCyclesCount + 1.U
 
   //We define the pipeline stages
   val if_stage    = Module(new IF(BinaryFile))
@@ -45,6 +57,18 @@ class PipelinedRV32Icore (BinaryFile: String) extends Module {
   btb.io.updateTarget := ex_stage.io.btbUpdateTarget
   btb.io.mispredicted := ex_stage.io.btbMispredicted
 
+  // Performance counters update
+  when(ex_stage.io.btbUpdate) {
+    totalBranchesCount := totalBranchesCount + 1.U
+    when(ex_stage.io.btbMispredicted) {
+      mispredictedBranchesCount := mispredictedBranchesCount + 1.U
+    }
+  }
+
+  io.totalCycles          := totalCyclesCount
+  io.totalBranches        := totalBranchesCount
+  io.mispredictedBranches := mispredictedBranchesCount
+
   // << CHANGED in A06 >>
   //Why: IF now uses EX correction and BTB prediction
   if_stage.io.flush        := ex_stage.io.flush
@@ -55,6 +79,7 @@ class PipelinedRV32Icore (BinaryFile: String) extends Module {
   if_stage.io.btbValid        := btb.io.valid
   if_stage.io.btbTarget       := btb.io.target
   if_stage.io.btbPredictTaken := btb.io.predictTaken
+  if_stage.io.useBTB          := io.useBTB
 
   //We connect IF to IF barrier
   if_barrier.io.inInstr := if_stage.io.instr

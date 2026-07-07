@@ -35,6 +35,9 @@ class PipelinedRISCV32I_tb extends AnyFlatSpec with ChiselScalatestTester {
       //We disable the default timeout
       dut.clock.setTimeout(0)
 
+      //We enable the BTB
+      dut.io.useBTB.poke(true.B)
+
       //We check the setup checkpoint
       stepUntil(dut, 100, 50, "setup done")
       assert(!dut.io.exception.peek().litToBoolean, "exception raised after setup")
