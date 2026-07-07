@@ -1,0 +1,43 @@
+00500093 // 0: ADDI x1,x0,5 - x1=5, setup
+00500113 // 1: ADDI x2,x0,5 - x2=5, setup
+00300193 // 2: ADDI x3,x0,3 - x3=3, loop counter init
+06400493 // 3: ADDI x9,x0,100 - checkpoint 100: setup done
+00700213 // 4: ADDI x4,x0,7 - x4=7, unequal to x1
+00408463 // 5: BEQ x1,x4,+8 - not taken, checkpoint 201 must execute
+0C900493 // 6: ADDI x9,x0,201 - checkpoint 201: not-taken path confirmed
+00500293 // 7: ADDI x5,x0,5 - x5=5, equal to x1
+00508463 // 8: BEQ x1,x5,+8 - taken [BTB set0 LRU1: PC[4:2]=0]
+3E700493 // 9: ADDI x9,x0,999 - SKIPPED wrong-path instruction
+0CA00493 // 10: ADDI x9,x0,202 - checkpoint 202: taken branch target reached
+00300193 // 11: ADDI x3,x0,3 - x3=3, backward loop init
+FFF18193 // 12: ADDI x3,x3,-1 - loop head, decrement
+FE019EE3 // 13: BNE x3,x0,-4 - loop branch, taken twice then not taken
+0CB00493 // 14: ADDI x9,x0,203 - checkpoint 203: backward loop done
+00300313 // 15: ADDI x6,x0,3 - x6=3, second loop init
+00000013 // 16: NOP - padding
+00000013 // 17: NOP - padding
+00000013 // 18: NOP - padding
+00000013 // 19: NOP - padding
+00000013 // 20: NOP - padding
+00000013 // 21: NOP - padding
+00000013 // 22: NOP - padding
+FFF30313 // 23: ADDI x6,x6,-1 - loop head2, decrement
+FE031EE3 // 24: BNE x6,x0,-4 - loop branch2 [BTB set0 LRU2: PC[4:2]=0]
+0CC00493 // 25: ADDI x9,x0,204 - checkpoint 204: repeated branch pattern done
+03200393 // 26: ADDI x7,x0,50 - x7=50
+FCE38393 // 27: ADDI x7,x7,-50 - x7=0, used immediately by branch
+00038463 // 28: BEQ x7,x0,+8 - taken, tests forwarding into branch compare
+3E700493 // 29: ADDI x9,x0,999 - SKIPPED wrong-path instruction
+0CD00493 // 30: ADDI x9,x0,205 - checkpoint 205: forwarding into branch works
+008002EF // 31: JAL x5,+8 - jump to index 33, x5 = PC+4 = 128
+3E700493 // 32: ADDI x9,x0,999 - SKIPPED by JAL
+0CE00493 // 33: ADDI x9,x0,206 - checkpoint 206: JAL target reached
+01428413 // 34: ADDI x8,x5,20 - x8 = 128 + 20 = 148, target index 37
+00040067 // 35: JALR x0,x8,0 - jump to index 37
+3E700493 // 36: ADDI x9,x0,999 - SKIPPED by JALR
+0CF00493 // 37: ADDI x9,x0,207 - checkpoint 207: JALR target reached
+00900113 // 38: ADDI x2,x0,9 - x2=9, setup for LRU collision branch
+00000013 // 39: NOP - padding
+00014463 // 40: BLT x2,x0,+8 - not taken [BTB set0 LRU3: PC[4:2]=0]
+0D000493 // 41: ADDI x9,x0,208 - checkpoint 208: LRU collision branch resolved
+4D200493 // 42: ADDI x9,x0,1234 - final sentinel value
