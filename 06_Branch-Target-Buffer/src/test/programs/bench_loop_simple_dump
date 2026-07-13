@@ -8,3 +8,4 @@ exit:
 
 
 so in this case Accuracy should be 100% for both BtB and NoBtB...
+bcz The Golden Rule: Without BTB = Always Predict "Not Taken"

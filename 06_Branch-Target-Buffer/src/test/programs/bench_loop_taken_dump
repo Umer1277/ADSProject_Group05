@@ -5,3 +5,6 @@ loop:
   x1 = x1 - 1
   BNE x1, x0, loop   
  ← is x1 ≠ 0? YES → TAKEN (99 times), only NOT taken at the end
+
+Without BTB: 99 wrong out of 100 → only 1% correct
+With BTB: After the first miss, the 2-bit counter goes to state 2 (weakly taken), then 3 (strongly taken). Every iteration 2–99 is correctly predicted taken. Only iteration 1 (first miss) and iteration 100 (exit, predicted taken but not-taken) are wrong → 2 mispredictions → 98%
