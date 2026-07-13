@@ -1,0 +1,20 @@
+bench_loop_nested — 20% without BTB vs 73% with BTB
+
+outer = 5, inner = 5
+outer_loop:
+  inner_loop:
+    inner--
+    BNE inner, 0, inner_loop   ← taken 4 times, not-taken 1 time per outer iteration
+  outer--
+  BNE outer, 0, outer_loop     ← taken 4 times, not-taken once total
+
+
+Without BTB (24 mispredictions out of 30):
+
+Every taken branch is wrong → 5×4 inner + 4 outer = 24 mispredictions
+
+
+With BTB (8 mispredictions out of 30):
+
+Inner loop: 5 outer iterations × 1 first-miss + 5 exit mispredictions = ~8 mispredictions
+The BTB remembers both branches across outer iterations

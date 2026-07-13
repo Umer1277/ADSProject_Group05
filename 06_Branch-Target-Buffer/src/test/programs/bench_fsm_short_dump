@@ -1,0 +1,12 @@
+bench_fsm_short — Same 33% with and without BTB 
+
+x1 = 3
+loop:
+  x1 = x1 - 1
+  BNE x1, x0, loop    ← TAKEN, TAKEN, NOT-TAKEN
+
+
+Both get exactly 2 mispredictions out of 3 → 33.33%
+The numbers are the same but for completely different reasons — this is what proves the FSM is working correctly!
+Without BTB: iterations 1 and 2 are wrong (both taken, predicted not-taken)
+With BTB: iteration 1 is wrong (first miss), iteration 3 is wrong (exit predicted taken)

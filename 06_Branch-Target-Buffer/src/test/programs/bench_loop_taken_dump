@@ -1,0 +1,7 @@
+bench_loop_taken — 1% without BTB vs 98% with BTB 
+
+x1 = 100
+loop:
+  x1 = x1 - 1
+  BNE x1, x0, loop   
+ ← is x1 ≠ 0? YES → TAKEN (99 times), only NOT taken at the end
