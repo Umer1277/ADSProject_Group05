@@ -1,0 +1,10 @@
+x1 = 100, x2 = 0
+loop:
+  BEQ x1, x2, exit     ← NOT TAKEN (because x1 ≠ x2)
+  x2 = x2 + 1
+  JAL loop              ← unconditional, always goes back
+exit:
+  x3 = 123              ← sentinel
+
+
+so in this case Accuracy should be 100% for both BtB and NoBtB...
